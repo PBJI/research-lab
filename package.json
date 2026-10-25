@@ -1,0 +1,8 @@
+{
+  "name": "researchlab",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline-first modular research analyst toolkit",
+  "scripts": {"serve": "python3 -m http.server 8000"}
+}

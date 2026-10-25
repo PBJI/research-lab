@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f6f7fb" />
+  <meta name="description" content="ResearchLab is an offline-first workspace for research planning, data analysis, qualitative coding, visualization, and reporting." />
+  <title>ResearchLab · Research workspace</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="app-shell" id="appShell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-row">
+        <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="brand-copy"><strong>research<span>lab</span></strong><small>RESEARCH WORKSPACE</small></div>
+        <button class="icon-button sidebar-close" id="sidebarClose" aria-label="Close navigation">×</button>
+      </div>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+        <button class="nav-item active" data-page="dashboard"><span class="nav-icon">▦</span><span>Dashboard</span></button>
+        <button class="nav-item" data-page="planning"><span class="nav-icon">◈</span><span>Research planning</span></button>
+        <button class="nav-item" data-page="literature"><span class="nav-icon">▤</span><span>Literature review</span></button>
+        <button class="nav-item" data-page="collection"><span class="nav-icon">☷</span><span>Data collection</span></button>
+        <button class="nav-item" data-page="data"><span class="nav-icon">▦</span><span>Data workspace</span><span class="nav-count" id="datasetCount">0</span></button>
+        <button class="nav-item" data-page="statistics"><span class="nav-icon">∑</span><span>Statistical analysis</span></button>
+        <button class="nav-item" data-page="qualitative"><span class="nav-icon">≋</span><span>Qualitative analysis</span></button>
+        <button class="nav-item" data-page="visualizations"><span class="nav-icon">▥</span><span>Visualizations</span></button>
+        <button class="nav-item" data-page="calculators"><span class="nav-icon">⌗</span><span>Research calculators</span></button>
+        <div class="nav-divider"></div>
+        <button class="nav-item" data-page="reports"><span class="nav-icon">▧</span><span>Report builder</span></button>
+        <button class="nav-item" data-page="references"><span class="nav-icon">❞</span><span>References</span></button>
+        <button class="nav-item" data-page="tasks"><span class="nav-icon">✓</span><span>Project tasks</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="storage-card"><div class="storage-icon">⌁</div><div><strong>Local workspace</strong><p>Your research stays in this browser.</p></div><span class="status-dot"></span></div>
+        <button class="nav-item" data-page="settings"><span class="nav-icon">⚙</span><span>Settings & backup</span></button>
+        <div class="sidebar-user"><div class="avatar">RL</div><div class="user-copy"><strong>Researcher</strong><small>Personal workspace</small></div><button class="icon-button user-more" data-page="settings" aria-label="Workspace settings">···</button></div>
+      </div>
+    </aside>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+    <main class="main-shell">
+      <header class="topbar">
+        <div class="topbar-left"><button class="icon-button menu-toggle" id="menuToggle" aria-label="Open navigation">☰</button><div class="breadcrumb"><span>Workspace</span><b>/</b><strong id="currentCrumb">Dashboard</strong></div></div>
+        <div class="topbar-actions">
+          <label class="project-select-wrap"><span class="sr-only">Active project</span><span class="project-pin">◆</span><select id="projectSelect" aria-label="Active project"></select></label>
+          <button class="top-icon" id="globalSearchButton" title="Search workspace (Ctrl/⌘ + K)" aria-label="Search workspace">⌕</button>
+          <button class="top-icon theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">☼</button>
+          <div class="top-avatar">R</div>
+        </div>
+      </header>
+      <div class="main-content" id="mainContent" tabindex="-1"></div>
+      <footer class="app-footer"><span>ResearchLab <b>·</b> Research without the busywork.</span><span id="saveIndicator"><i></i> Saved locally</span></footer>
+    </main>
+  </div>
+  <div id="modalRoot"></div>
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

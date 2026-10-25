@@ -1,0 +1,22 @@
+export const uid = (prefix = 'id') => `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`;
+export const nowISO = () => new Date().toISOString();
+export const niceDate = value => { if (!value) return '—'; const d = new Date(value); return Number.isNaN(d.getTime()) ? String(value) : d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}); };
+export const timeAgo = value => { const ms=Date.now()-new Date(value).getTime(); if(!Number.isFinite(ms)||ms<0)return 'just now'; const m=Math.floor(ms/60000); if(m<1)return 'just now'; if(m<60)return `${m}m ago`; const h=Math.floor(m/60); if(h<24)return `${h}h ago`; const d=Math.floor(h/24); return d<30?`${d}d ago`:niceDate(value); };
+export const fmt = (n, digits=3) => { if (n === null || n === undefined || Number.isNaN(Number(n))) return '—'; if (!Number.isFinite(Number(n))) return '∞'; return Number(n).toLocaleString(undefined,{maximumFractionDigits:digits}); };
+export const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+export function parseCSV(text){
+  const rows=[]; let row=[], field='', quoted=false;
+  text=String(text??'').replace(/^\uFEFF/,'');
+  for(let i=0;i<text.length;i++){const c=text[i]; if(quoted){if(c==='"'&&text[i+1]==='"'){field+='"';i++;}else if(c==='"'){quoted=false;}else field+=c;}else if(c==='"'&&field===''){quoted=true;}else if(c===','){row.push(field);field='';}else if(c==='\n'){row.push(field);if(row.some(v=>v!==''))rows.push(row);row=[];field='';}else if(c==='\r'){if(text[i+1]==='\n')i++;row.push(field);if(row.some(v=>v!==''))rows.push(row);row=[];field='';}else field+=c;}
+  row.push(field);if(row.some(v=>v!==''))rows.push(row);if(!rows.length)return {columns:[],rows:[]};
+  const columns=rows.shift().map((v,i)=>v.trim()||`column_${i+1}`); const data=rows.map(r=>Object.fromEntries(columns.map((col,i)=>[col, r[i] ?? '']))); return {columns,rows:data};
+}
+export function toCSV(columns, rows){const cell=v=>{const s=String(v??'');return /[",\r\n]/.test(s)?`"${s.replace(/"/g,'""')}"`:s;};return [columns.map(cell).join(','),...rows.map(r=>columns.map(c=>cell(r[c])).join(','))].join('\r\n');}
+export function downloadBlob(content, filename, type='text/plain;charset=utf-8'){const blob=content instanceof Blob?content:new Blob([content],{type});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1200);}
+export function numericValues(rows,col){return rows.map(r=>r[col]).filter(v=>v!==''&&v!==null&&v!==undefined&&Number.isFinite(Number(v))).map(Number);}
+export function htmlPageHeader(title, subtitle, eyebrow='RESEARCH WORKSPACE', actions=''){return `<div class="page-head"><div><div class="eyebrow">${escapeHTML(eyebrow)}</div><h1>${escapeHTML(title)}</h1><p>${escapeHTML(subtitle)}</p></div><div class="head-actions">${actions}</div></div>`;}
+export function emptyState(icon,title,desc,action=''){return `<div class="empty-state"><div class="empty-icon">${icon}</div><strong>${escapeHTML(title)}</strong><p>${escapeHTML(desc)}</p>${action}</div>`;}
+export function btn(label,action,kind='secondary',extra=''){return `<button class="btn ${kind}" data-action="${escapeHTML(action)}" ${extra}>${label}</button>`;}
+export function formField(label,name,placeholder='',type='text',value='',extra=''){return `<div class="field"><label for="${escapeHTML(name)}">${escapeHTML(label)}</label><input id="${escapeHTML(name)}" name="${escapeHTML(name)}" type="${type}" placeholder="${escapeHTML(placeholder)}" value="${escapeHTML(value)}" ${extra}></div>`;}
+export function textField(label,name,placeholder='',value='',extra=''){return `<div class="field"><label for="${escapeHTML(name)}">${escapeHTML(label)}</label><textarea id="${escapeHTML(name)}" name="${escapeHTML(name)}" placeholder="${escapeHTML(placeholder)}" ${extra}>${escapeHTML(value)}</textarea></div>`;}
+export function tableHTML(columns, rows, empty='No records yet.'){if(!rows.length)return `<div class="empty-state"><div class="empty-icon">▤</div><strong>${escapeHTML(empty)}</strong><p>Add a record or import data to populate this table.</p></div>`;return `<div class="table-wrap"><table><thead><tr>${columns.map(c=>`<th>${escapeHTML(c.label)}</th>`).join('')}</tr></thead><tbody>${rows.map(row=>`<tr>${columns.map(c=>`<td>${c.render?c.render(row):escapeHTML(row[c.key]??'—')}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;}
